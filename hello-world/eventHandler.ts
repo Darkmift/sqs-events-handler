@@ -1,9 +1,9 @@
 import logger from './utils/logger-winston';
-import { IAssignVolunteerEvent, ICheckedValue, LinkedPulses } from './types';
+import { ICheckedValue, LinkedPulses, MondayEvent } from './types';
 import {
     getHelpRequesterInfo,
     getVolunteersGroupedBy,
-    moveHelpRequesterBackToRawList,
+    // moveHelpRequesterBackToRawList,
     setRequesterMultipleValues,
 } from './clients/graphql/client';
 import { APIGatewayProxyResult } from 'aws-lambda';
@@ -18,9 +18,7 @@ import {
 import tryParse from './utils/tryparse';
 import getTimeForNotifyVolunteer from './utils/getTimeForNotifyVolunteer';
 
-const eventHandler = async ({
-    body: { event: mondayEvent },
-}: IAssignVolunteerEvent): Promise<APIGatewayProxyResult> => {
+const eventHandler = async (mondayEvent: MondayEvent): Promise<APIGatewayProxyResult> => {
     /**
      * response body to return
      */
@@ -42,7 +40,7 @@ const eventHandler = async ({
     };
 
     try {
-        logger.log(`Monday move_pulse_into_group event: ${event}`);
+        logger.log(`Monday move_pulse_into_group event: ${mondayEvent}`);
 
         const helpRequesterId = mondayEvent.pulseId as number;
         const helpRequesterBoardId = mondayEvent.boardId as number;
@@ -139,6 +137,7 @@ const eventHandler = async ({
         output.body = JSON.stringify(responseBody);
         return output;
     } catch (error) {
+        logger.error('🚀 ~ file: eventHandler.ts:142 ~ error:', error as Error);
         logger.error('Error processing record:', { mondayEvent, error });
         output.statusCode = 500;
         responseBody.success = false;
