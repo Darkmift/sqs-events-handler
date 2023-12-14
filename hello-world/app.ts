@@ -1,9 +1,9 @@
+import 'dotenv/config';
 import { APIGatewayProxyResult, SQSEvent } from 'aws-lambda';
-
-import { SQSClient, DeleteMessageCommand } from '@aws-sdk/client-sqs';
 import logger from './utils/logger-winston';
 import tryParse from './utils/tryparse';
 import { IAssignVolunteerEvent } from './types';
+import eventHandler from './eventHandler';
 
 /**
  *
@@ -15,8 +15,6 @@ import { IAssignVolunteerEvent } from './types';
  *
  */
 
-const sqsClient = new SQSClient({ region: 'us-east-1' });
-
 export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyResult> => {
     const response = {
         statusCode: 200,
@@ -24,7 +22,7 @@ export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyRes
     };
 
     try {
-        for (const record of event.Records) {
+        for await (const record of event.Records) {
             logger.log(`Processing record: ${record.messageId}`);
 
             try {
@@ -36,23 +34,15 @@ export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyRes
                 const eventType = eventBody.body.event.type;
                 logger.log('🚀 ~ file: app.ts:37 ~ lambdaHandler ~ eventType:', { eventType });
 
-                const receiptHandle = record.receiptHandle;
-                const queueUrl = record.eventSourceARN.replace(
-                    /^arn:aws:sqs:[^:]+:\d+:/,
-                    'https://sqs.us-east-1.amazonaws.com/',
-                );
+                const operationResult = await eventHandler(eventBody);
+                console.log('🚀 ~ file: app.ts:43 ~ lambdaHandler ~ response:', { response: operationResult, record });
+                if (!operationResult.statusCode || operationResult.statusCode !== 200) {
+                    throw new Error('Error processing event');
+                }
 
-                // Create a DeleteMessageCommand
-                const deleteParams = {
-                    QueueUrl: queueUrl,
-                    ReceiptHandle: receiptHandle,
-                };
-
-                logger.log(`Queue URL: ${queueUrl}, Receipt Handle: ${receiptHandle}`);
-
-                // Delete the message from the queue
-                await sqsClient.send(new DeleteMessageCommand(deleteParams));
-                console.log('Message deleted:', receiptHandle);
+                /**
+                 * determine event type
+                 */
             } catch (error) {
                 console.error('Error processing record:', record, error);
                 // You might want to implement additional error handling here
