@@ -18,7 +18,9 @@ import {
 import tryParse from './utils/tryparse';
 import getTimeForNotifyVolunteer from './utils/getTimeForNotifyVolunteer';
 
-const eventHandler = async ({ body: { event: mondayEvent } }: IAssignVolunteerEvent) => {
+const eventHandler = async ({
+    body: { event: mondayEvent },
+}: IAssignVolunteerEvent): Promise<APIGatewayProxyResult> => {
     /**
      * response body to return
      */
@@ -131,6 +133,11 @@ const eventHandler = async ({ body: { event: mondayEvent } }: IAssignVolunteerEv
             columnValues: updateValues,
         });
         logger.log('🚀 ~ file: app.ts:162 ~ lambdaHandler ~ response:', response);
+        responseBody.meta = response;
+        responseBody.success = true;
+        responseBody.reason = 'Successfully assigned';
+        output.body = JSON.stringify(responseBody);
+        return output;
     } catch (error) {
         logger.error('Error processing record:', { mondayEvent, error });
         output.statusCode = 500;
