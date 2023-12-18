@@ -1,17 +1,21 @@
 // Mock the module at the top of your test file
 jest.mock('../../clients/graphql/client', () => ({
     __esModule: true, // This is required for ES6 modules
-    default: mockMakeGQLRequest,
+    moveHelpRequesterBackToRawList: mockMoveHelpRequesterBackToRawList,
+    getHelpRequesterInfo: mockGetHelpRequesterInfo,
+    getVolunteersGroupedBy: mockGetVolunteersGroupedBy,
+    setRequesterMultipleValues: mockSetRequesterMultipleValues,
 }));
-import { mockHelpRequesterResponse, mockMakeGQLRequest } from '../mocks/client/index.mock';
-import { APIGatewayProxyResult } from 'aws-lambda';
+import mockedGQLMethods, {
+    mockGetHelpRequesterInfo,
+    mockGetVolunteersGroupedBy,
+    mockHelpRequesterResponse,
+    mockMoveHelpRequesterBackToRawList,
+    mockSetRequesterMultipleValues,
+} from '../mocks/client/index.mock';
 import { lambdaHandler } from '../../app';
 import { expect, describe, it, jest, beforeEach } from '@jest/globals';
 import { incomingEventMock } from '../mocks/events/assign-volunteer.mock';
-// import { SQSClient, DeleteMessageCommand } from '@aws-sdk/client-sqs';
-// import { mockClient } from 'aws-sdk-client-mock';
-
-// const sqsMock = mockClient(SQSClient);
 
 describe('Unit test for app handler', function () {
     let mockAwsEventClone = structuredClone(incomingEventMock);
@@ -25,13 +29,11 @@ describe('Unit test for app handler', function () {
     });
 
     it('verifies successful response', async () => {
-        // sqsMock.on(DeleteMessageCommand).resolves({});
-        // Call your function that uses SQSClient here
+        // Call your Lambda handler function
+        const result = await lambdaHandler(mockAwsEventClone);
 
-        const result: APIGatewayProxyResult = await lambdaHandler(mockAwsEventClone);
-
+        // Verify the response status code and body
         expect(result.statusCode).toEqual(200);
         expect(result.body).toEqual(JSON.stringify({ message: 'events processed' }));
-        // expect(sqsMock.calls()).toHaveLength(1);
     });
 });

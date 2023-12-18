@@ -1,35 +1,37 @@
 import { jest } from '@jest/globals';
-import {
-    GET_HELP_REQUESTER_DATA,
-    GET_VOLUNTEERS_GROUPED_BY_LANGUAGE,
-    MOVE_HELPREQUESTER_BACK_TO_RAWLIST_GROUP,
-    SET_REQUESTER_MULTIPLE_VALUES,
-} from '../../../clients/graphql/gql-strings';
-import { mockHelpRequester } from '../helprequester.mock';
-import mockVolunteerColumns from '../volunteerColumns.mock';
+// clientMocks.ts
 import mockGroupedVolunteers from '../groupedVolunteers.mock';
 import mockAssignedVolunteerResult from '../assignVolunteer.mock';
-import logger from '../../../utils/logger-winston';
+import { mockHelpRequester } from '../helprequester.mock';
 
 export const mockHelpRequesterResponse = {
     items: [mockHelpRequester],
 };
 
-export const mockMakeGQLRequest = jest.fn(
-    async (query: string, variables: Record<string, unknown>): Promise<unknown> => {
-        logger.log('🚀 ~ file: index.mock.ts:12 ~ { query, variables }:', { query, variables });
+// Mock for moveHelpRequesterBackToRawList
+export const mockMoveHelpRequesterBackToRawList = jest.fn(async (options) => {
+    return mockAssignedVolunteerResult;
+});
 
-        switch (query) {
-            case GET_HELP_REQUESTER_DATA:
-                return mockHelpRequesterResponse;
-            case GET_VOLUNTEERS_GROUPED_BY_LANGUAGE:
-                return mockGroupedVolunteers;
-            case MOVE_HELPREQUESTER_BACK_TO_RAWLIST_GROUP:
-                return mockAssignedVolunteerResult;
-            case SET_REQUESTER_MULTIPLE_VALUES:
-                return mockAssignedVolunteerResult;
-            default:
-                return {};
-        }
-    },
-);
+// Mock for getHelpRequesterInfo
+export const mockGetHelpRequesterInfo = jest.fn(async (helpRequesterId) => {
+    return mockHelpRequester;
+});
+
+// Mock for getVolunteersGroupedBy
+export const mockGetVolunteersGroupedBy = jest.fn(async (variables) => {
+    return mockGroupedVolunteers;
+});
+
+// Mock for setRequesterMultipleValues
+export const mockSetRequesterMultipleValues = jest.fn(async (variables) => {
+    return mockAssignedVolunteerResult;
+});
+
+// Export all mocks
+export default {
+    mockMoveHelpRequesterBackToRawList,
+    mockGetHelpRequesterInfo,
+    mockGetVolunteersGroupedBy,
+    mockSetRequesterMultipleValues,
+};
