@@ -3,7 +3,6 @@ import { ICheckedValue, LinkedPulses, MondayEvent } from './types';
 import {
     getHelpRequesterInfo,
     getVolunteersGroupedBy,
-    // moveHelpRequesterBackToRawList,
     setRequesterMultipleValues,
 } from './clients/graphql/client';
 import { APIGatewayProxyResult } from 'aws-lambda';
@@ -11,7 +10,6 @@ import {
     COLUMN_ASSIGN_VOLUNTEER_TO_REQUESTER,
     COLUMN_CAPACITY,
     GROUP_AWAITING_CALL_FROM_VOLUNTEER,
-    GROUP_RAW_LIST,
     VOLUNTEER_BOARD_ID,
     languageMap,
 } from './config/consts';
@@ -40,7 +38,7 @@ const eventHandler = async (mondayEvent: MondayEvent): Promise<APIGatewayProxyRe
     };
 
     try {
-        logger.log(`Monday move_pulse_into_group event: ${mondayEvent}`);
+        logger.log(`Monday move_pulse_into_group event:`, mondayEvent);
 
         const helpRequesterId = mondayEvent.pulseId as number;
         const helpRequesterBoardId = mondayEvent.boardId as number;
