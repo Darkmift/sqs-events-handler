@@ -34,7 +34,9 @@ export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyRes
                 const eventType = eventBody.body.event.type;
                 logger.log('🚀 ~ file: app.ts:37 ~ lambdaHandler ~ eventType:', { eventType });
 
-                const operationResult = await eventHandler(eventBody);
+                const mondayEvent = eventBody.body.event;
+
+                const operationResult = await eventHandler(mondayEvent);
                 console.log('🚀 ~ file: app.ts:43 ~ lambdaHandler ~ response:', { response: operationResult, record });
                 if (!operationResult.statusCode || operationResult.statusCode !== 200) {
                     throw new Error('Error processing event');
@@ -46,6 +48,10 @@ export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyRes
             } catch (error) {
                 console.error('Error processing record:', record, error);
                 // You might want to implement additional error handling here
+                response.statusCode = 500;
+                response.body = JSON.stringify({
+                    message: 'some error happened',
+                });
             }
         }
 
