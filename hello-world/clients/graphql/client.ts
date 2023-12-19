@@ -6,6 +6,7 @@ import {
     GET_VOLUNTEERS_GROUPED_BY_LANGUAGE,
     MOVE_HELPREQUESTER_BACK_TO_RAWLIST_GROUP,
     SET_REQUESTER_MULTIPLE_VALUES,
+    SET_VOLUNTEER_MULTIPLE_VALUES,
 } from './gql-strings';
 import {
     GetVolunteersGroupedByLanguageVariables,
@@ -71,6 +72,19 @@ export const setRequesterMultipleValues = async ({
         itemId,
         boardId,
         groupId,
+        columnValues,
+    });
+};
+
+// set multiple values for help requester (volunteer,date for call back,move to group)
+export const setVolunteerMultipleValues = async ({
+    itemId,
+    boardId,
+    columnValues,
+}: SetRequesterMultipleValuesVariables): Promise<void> => {
+    await _makeGQLRequest(SET_VOLUNTEER_MULTIPLE_VALUES, {
+        itemId,
+        boardId,
         columnValues,
     });
 };

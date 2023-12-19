@@ -1,4 +1,5 @@
 import { gql } from 'graphql-request';
+import { COLUMN_ASSIGEND_PULSES_TO_VOLUNTEER } from '../../config/consts';
 
 export const MOVE_HELPREQUESTER_BACK_TO_RAWLIST_GROUP = gql`
     mutation ChangeColumnValue($helpRequesterId: ID!, $groupId: String!) {
@@ -57,6 +58,13 @@ export const GET_VOLUNTEERS_GROUPED_BY_LANGUAGE = gql`
                 items {
                     id
                     name
+                    group {
+                        id
+                    }
+                    column_values(ids: "${COLUMN_ASSIGEND_PULSES_TO_VOLUNTEER}") {
+                        id
+                        value
+                    }
                 }
             }
         }
@@ -74,6 +82,18 @@ export const SET_REQUESTER_MULTIPLE_VALUES = gql`
             id
         }
         move_item_to_group(group_id: $groupId, item_id: $itemId) {
+            id
+        }
+    }
+`;
+export const SET_VOLUNTEER_MULTIPLE_VALUES = gql`
+    mutation SetRequesterMultipleValues($itemId: ID!, $boardId: ID!, $columnValues: JSON!) {
+        complexity {
+            before
+            after
+            reset_in_x_seconds
+        }
+        change_multiple_column_values(item_id: $itemId, board_id: $boardId, column_values: $columnValues) {
             id
         }
     }
