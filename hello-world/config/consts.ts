@@ -40,3 +40,7 @@ export const COLUMN_CAPACITY = 'numbers';
  * group id to assign the request helper to
  */
 export const GROUP_AWAITING_CALL_FROM_VOLUNTEER = 'new_group73364';
+/**
+ * column id in volunteer board for board relation to help requesters board
+ */
+export const COLUMN_ASSIGEND_PULSES_TO_VOLUNTEER = 'board_relation';
