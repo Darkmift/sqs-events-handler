@@ -55,9 +55,9 @@ const mockVolunteerColumns = {
                     type: 'board_relation',
                 },
                 {
-                    id: 'numbers',
-                    title: 'capacity',
-                    type: 'numbers',
+                    id: 'numbers2',
+                    title: 'Assigned',
+                    type: 'numbers2',
                 },
             ],
         },

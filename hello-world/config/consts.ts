@@ -35,7 +35,7 @@ export const VOLUNTEER_BOARD_ID = 1316808337;
 /**
  * column id for capacity
  */
-export const COLUMN_CAPACITY = 'numbers';
+export const COLUMN_CAPACITY = 'numbers2';
 /**
  * group id to assign the request helper to
  */
