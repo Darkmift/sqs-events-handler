@@ -135,12 +135,10 @@ const eventHandler = async (mondayEvent: MondayEvent): Promise<APIGatewayProxyRe
             availableVolunteer.column_values.find((c) => c.id === COLUMN_ASSIGEND_PULSES_TO_VOLUNTEER)?.value,
         )?.linkedPulseIds?.length;
         const updateVolunteerUpdateValues = JSON.stringify({
-            [COLUMN_CAPACITY]: {
-                value:
-                    typeof assignedHelpRequestersCount === 'number' && !isNaN(assignedHelpRequestersCount)
-                        ? assignedHelpRequestersCount + 1
-                        : 1,
-            },
+            [COLUMN_CAPACITY]:
+                typeof assignedHelpRequestersCount === 'number' && !isNaN(assignedHelpRequestersCount)
+                    ? assignedHelpRequestersCount + 1
+                    : 1,
         });
 
         await setVolunteerMultipleValues({
