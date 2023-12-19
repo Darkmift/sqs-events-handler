@@ -5,6 +5,7 @@ jest.mock('../../clients/graphql/client', () => ({
     getHelpRequesterInfo: mockGetHelpRequesterInfo,
     getVolunteersGroupedBy: mockGetVolunteersGroupedBy,
     setRequesterMultipleValues: mockSetRequesterMultipleValues,
+    setVolunteerMultipleValues: mockSetVolunteerMultipleValues,
 }));
 import mockedGQLMethods, {
     mockGetHelpRequesterInfo,
@@ -12,6 +13,7 @@ import mockedGQLMethods, {
     mockHelpRequesterResponse,
     mockMoveHelpRequesterBackToRawList,
     mockSetRequesterMultipleValues,
+    mockSetVolunteerMultipleValues,
 } from '../mocks/client/index.mock';
 import { lambdaHandler } from '../../app';
 import { expect, describe, it, jest, beforeEach } from '@jest/globals';
