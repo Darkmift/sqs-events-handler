@@ -80,6 +80,10 @@ export interface IMatchingVolunteers {
             items: {
                 id: string;
                 name: string;
+                group: {
+                    id: string;
+                };
+                column_values: ColumnValue[];
             }[];
         };
     }[];

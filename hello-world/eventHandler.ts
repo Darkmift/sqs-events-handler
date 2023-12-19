@@ -4,9 +4,11 @@ import {
     getHelpRequesterInfo,
     getVolunteersGroupedBy,
     setRequesterMultipleValues,
+    setVolunteerMultipleValues,
 } from './clients/graphql/client';
 import { APIGatewayProxyResult } from 'aws-lambda';
 import {
+    COLUMN_ASSIGEND_PULSES_TO_VOLUNTEER,
     COLUMN_ASSIGN_VOLUNTEER_TO_REQUESTER,
     COLUMN_CAPACITY,
     GROUP_AWAITING_CALL_FROM_VOLUNTEER,
@@ -128,6 +130,26 @@ const eventHandler = async (mondayEvent: MondayEvent): Promise<APIGatewayProxyRe
             groupId: GROUP_AWAITING_CALL_FROM_VOLUNTEER,
             columnValues: updateValues,
         });
+
+        const assignedHelpRequestersCount = tryParse<LinkedPulses>(
+            availableVolunteer.column_values.find((c) => c.id === COLUMN_ASSIGEND_PULSES_TO_VOLUNTEER)?.value,
+        )?.linkedPulseIds?.length;
+        const updateVolunteerUpdateValues = JSON.stringify({
+            [COLUMN_CAPACITY]: {
+                value:
+                    typeof assignedHelpRequestersCount === 'number' && !isNaN(assignedHelpRequestersCount)
+                        ? assignedHelpRequestersCount + 1
+                        : 1,
+            },
+        });
+
+        await setVolunteerMultipleValues({
+            itemId: parseInt(availableVolunteer.id),
+            boardId: VOLUNTEER_BOARD_ID,
+            groupId: availableVolunteer.group.id,
+            columnValues: updateVolunteerUpdateValues,
+        });
+
         logger.log('🚀 ~ file: app.ts:162 ~ lambdaHandler ~ response:', response);
         responseBody.meta = response;
         responseBody.success = true;
