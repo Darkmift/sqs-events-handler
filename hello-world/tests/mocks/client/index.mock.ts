@@ -25,7 +25,11 @@ export const mockGetVolunteersGroupedBy = jest.fn(async (variables) => {
 
 // Mock for setRequesterMultipleValues
 export const mockSetRequesterMultipleValues = jest.fn(async (variables) => {
-    return mockAssignedVolunteerResult;
+    return {};
+});
+// Mock for setRequesterMultipleValues
+export const mockSetVolunteerMultipleValues = jest.fn(async (variables) => {
+    return {};
 });
 
 // Export all mocks
@@ -34,4 +38,5 @@ export default {
     mockGetHelpRequesterInfo,
     mockGetVolunteersGroupedBy,
     mockSetRequesterMultipleValues,
+    mockSetVolunteerMultipleValues,
 };
