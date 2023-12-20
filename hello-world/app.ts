@@ -1,5 +1,8 @@
 import 'dotenv/config';
-import { APIGatewayProxyResult, SQSEvent } from 'aws-lambda';
+import {
+    //  APIGatewayProxyResult,
+    SQSEvent,
+} from 'aws-lambda';
 import logger from './utils/logger-winston';
 import tryParse from './utils/tryparse';
 import { IAssignVolunteerEvent } from './types';
@@ -15,7 +18,8 @@ import eventHandler from './eventHandler';
  *
  */
 
-export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyResult> => {
+// export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyResult> => {
+export const lambdaHandler = async (event: SQSEvent) => {
     const response = {
         statusCode: 200,
         body: '{}',
@@ -56,7 +60,7 @@ export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyRes
         }
 
         response.body = JSON.stringify({ message: 'events processed' });
-        return response;
+        // return response;
     } catch (err) {
         console.log(err);
 
@@ -64,6 +68,6 @@ export const lambdaHandler = async (event: SQSEvent): Promise<APIGatewayProxyRes
         response.body = JSON.stringify({
             message: 'some error happened',
         });
-        return response;
+        // return response;
     }
 };
