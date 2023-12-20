@@ -72,6 +72,12 @@ export interface SetRequesterMultipleValuesVariables {
     columnValues: string; // JSON string
 }
 
+export interface SetVolunteerMultipleValuesVariables {
+    itemId: number;
+    boardId: number;
+    columnValues: string; // JSON string
+}
+
 // Monday GQL Types
 
 export interface IMatchingVolunteers {

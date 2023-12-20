@@ -131,9 +131,12 @@ const eventHandler = async (mondayEvent: MondayEvent): Promise<APIGatewayProxyRe
             columnValues: updateValues,
         });
 
-        const assignedHelpRequestersCount = tryParse<LinkedPulses>(
+        const assignedHelpRequesters = tryParse<LinkedPulses>(
             availableVolunteer.column_values.find((c) => c.id === COLUMN_ASSIGEND_PULSES_TO_VOLUNTEER)?.value,
-        )?.linkedPulseIds?.length;
+        );
+
+        const assignedHelpRequestersCount = assignedHelpRequesters?.linkedPulseIds?.length;
+
         const updateVolunteerUpdateValues = JSON.stringify({
             [COLUMN_CAPACITY]:
                 typeof assignedHelpRequestersCount === 'number' && !isNaN(assignedHelpRequestersCount)
@@ -141,11 +144,17 @@ const eventHandler = async (mondayEvent: MondayEvent): Promise<APIGatewayProxyRe
                     : 1,
         });
 
-        await setVolunteerMultipleValues({
+        const volunteerMutationResponse = await setVolunteerMultipleValues({
             itemId: parseInt(availableVolunteer.id),
             boardId: VOLUNTEER_BOARD_ID,
-            groupId: availableVolunteer.group.id,
             columnValues: updateVolunteerUpdateValues,
+        });
+
+        logger.log('file: app.ts:153 ~ lambdaHandler: log - updateVolunteerUpdateValues', {
+            assignedHelpRequesters,
+            assignedHelpRequestersCount,
+            updateVolunteerUpdateValues,
+            volunteerMutationResponse,
         });
 
         logger.log('🚀 ~ file: app.ts:162 ~ lambdaHandler ~ response:', response);

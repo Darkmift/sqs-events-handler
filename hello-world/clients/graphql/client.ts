@@ -15,6 +15,7 @@ import {
     IRequestHelper,
     MoveHelpRequesterBackToRawListGroupVariables,
     SetRequesterMultipleValuesVariables,
+    SetVolunteerMultipleValuesVariables,
 } from '../../types';
 
 export const _makeGQLRequest = async <T = unknown>(
@@ -81,8 +82,8 @@ export const setVolunteerMultipleValues = async ({
     itemId,
     boardId,
     columnValues,
-}: SetRequesterMultipleValuesVariables): Promise<void> => {
-    await _makeGQLRequest(SET_VOLUNTEER_MULTIPLE_VALUES, {
+}: SetVolunteerMultipleValuesVariables): Promise<unknown> => {
+    return await _makeGQLRequest(SET_VOLUNTEER_MULTIPLE_VALUES, {
         itemId,
         boardId,
         columnValues,
